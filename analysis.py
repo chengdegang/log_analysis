@@ -1,11 +1,13 @@
 import argparse
 import re
 import datetime
+import csv
 
-# file = 'ces.txt'
+file = 'ces.txt'
 
-def read(exts):
-    with open(exts.filename) as ces:
+def read(file):
+    result_data = []
+    with open(file) as ces:
         read = ces.readlines()
         time1 = []
         time2 = []
@@ -38,25 +40,51 @@ def read(exts):
     # print(num_time2)
 
     #处理拿到的time1、2
-    value = [num_time2[i] - num_time1[i] for i in range(len(num_time1))]
-    print(value)
-    return value
+    values = [num_time2[i] - num_time1[i] for i in range(len(num_time1))]
+    #统一处理value为小数点后三位
+    for i in range(len(values)):
+        # print(float('%.4f' % values[i]))
+        result_data.append(float('%.3f' % values[i]))
+    # print(len(result_data))
+    print(result_data)
+    return result_data
 
-def write(list):
-    time_stamp = '{0:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-    writefile = f'data/result_{time_stamp}.txt'
-    with open(writefile,'a') as wf:
+#结果写入txt
+def write_txt(list):
+    # time_stamp = '{0:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+    writefile = f'data/result.txt'
+    with open(writefile,'w') as wf:
+        wf.write('T2-T1时间差'+'\n')
         for wline in list:
-            print(float('%.3f' % wline))
-            wf.write(str(float('%.3f' % wline))+'\n')
+            print(wline)
+            wf.write(str(wline)+'\n')
 
-# read('ces.txt')
+# 结果写入csv
+def write_csv():
+    headers = ['header1', 'header2', 'header3', 'header4', 'header5']
+    rows = [
+        [1, 'xiaoming', 'male', 168, 23],
+        [2, 'xiaohong', 'female', 162, 22],
+        [3, 'xiaozhang', 'female', 163, 21],
+    ]
+    with open('data/test.csv', 'w')as f:
+        f_csv = csv.writer(f)
+        f_csv.writerow(headers)
+        f_csv.writerows(rows)
+
+"""
+通过sh文件指定运行
+"""
 def external():
     ext = argparse.ArgumentParser()
     ext.add_argument('--filename', required=True)
     exts = ext.parse_args()
     return exts
+# read(file)
 
-list= read(external())
-write(list)
-# write(read('ces.txt'))
+#可配置时调用函数
+# list= read(external())
+write_txt(read(file))
+
+#以下为测试
+# write_csv()
