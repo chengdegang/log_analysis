@@ -4,7 +4,6 @@ import re
 import datetime
 import csv
 import sys
-import time
 from time import sleep
 from tqdm import tqdm
 
@@ -113,7 +112,7 @@ def judge(str1,str2):
 
 class Deal_ylog():
     # pdb.set_trace()
-    def read(self,file,infopic='2021-09-29-10-48-50'):
+    def read(self,file,infopic):
         # 读取所有指定文本格式内的内容
         result = []
         with open(file) as f:
@@ -123,16 +122,21 @@ class Deal_ylog():
             res = comment2.findall(read)
             # print(res[4])
             # 在所有指定文本格式内的内容查找符合条件的
-            match = f'{infopic}_Suc.jpg'
+            match = infopic
             for data in res:
                 if match in data:  # _Fail  _Suc
                     # print(data)
-                    needdata1 = re.findall(r"cam_intri: (.+?)\n", data)  # ??
+                    needdata1 = re.findall(r"cam_intri: (.+?)\n", data)  # 内参
                     # needdata1 = f'ur input:{match}\ncam_intri: {needdata1[0]}'
-                    result.append(f'ur input:{match}')
-                    result.append(f'cam_intri: {needdata1[0]}')
-                    print(f'\n{result[0]}\n{result[1]}')
-                    needdata2 = re.findall(r"cam_intri: (.+?)\n", data)
+                    result.append(f'ur input: {match}')
+                    result.append(f'内参是: {needdata1[0]}')
+
+                    needdata2 = re.findall(r"tum]:1 (.+?)\n", data)  # 外参
+                    result.append(f'外参是: {needdata2[0]}')
+                    print(f'\n{result[0]}\n{result[1]}\n{result[2]}')
+            else:
+                if len(result) == 0:
+                    print(f'没有找到输入的数据{match}')
         return result
 
     def external(self):
@@ -148,15 +152,18 @@ class Deal_ylog():
 
 if __name__ == '__main__':
     #测试部分
-    # data = testylog.read(file='data/ylog.txt',infopic='2021-09-29-10-48-50')
+    # test = Deal_ylog()
+    # data = test.read(file='data/ylog.txt',infopic='2021-09-29-10-48-50_Suc.jpg')
 
     #正式运行代码
     testylog = Deal_ylog()
     file = str(sys.argv[1])
     infopic = str(sys.argv[2])
     for i in tqdm(range(20)):
-        sleep(0.1)
+        sleep(0.2)
     data = testylog.read(file=file,infopic=infopic)
+
+    #其他...
     # data = testylog.read(testylog.external())
 
     # test = Deal_data()  #写数据到指定文件中
