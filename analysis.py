@@ -92,8 +92,10 @@ def judge(str1,str2):
     #替换掉两个字符串中所有的空格
     str1 = str1.replace(' ','')
     str2 = str2.replace(' ','')
+    result = ''
     if str1 == str2:
-        print("{:*{}66}".format(f'  对比内容完全相同  ', '^'))
+        # print("{:*{}66}".format(f'  对比内容完全相同  ', '^'))
+        result = "{:*{}66}".format(f'  对比内容完全相同  ', '^')
     else:
         if len(str1) == len(str2):
             str1l = []
@@ -105,10 +107,13 @@ def judge(str1,str2):
             n = 0
             for s1 in str1l:
                 if s1 != str2l[n]:
-                    print(f'find diff is {s1} , no [{n+1}]')
+                    # print(f'find diff is {s1} , no [{n+1}]')
+                    result = f'find diff is {s1} , no [{n+1}]'
                 n = n + 1
         else:
-            print("{:*{}66}".format(f'  对比内容不相同  ', '^'))
+            # print("{:*{}66}".format(f'  对比内容不相同  ', '^'))
+            result = "{:*{}66}".format(f'  对比内容不相同  ', '^')
+    return result
 
 class Deal_ylog():
     # pdb.set_trace()
@@ -156,12 +161,12 @@ if __name__ == '__main__':
     # data = test.read(file='data/ylog.txt',infopic='2021-09-29-10-48-50_Suc.jpg')
 
     #正式运行代码
-    testylog = Deal_ylog()
-    file = str(sys.argv[1])
-    infopic = str(sys.argv[2])
-    for i in tqdm(range(20)):
-        sleep(0.2)
-    data = testylog.read(file=file,infopic=infopic)
+    # testylog = Deal_ylog()
+    # file = str(sys.argv[1])
+    # infopic = str(sys.argv[2])
+    # for i in tqdm(range(20)):
+    #     sleep(0.2)
+    # data = testylog.read(file=file,infopic=infopic)
 
     #其他...
     # data = testylog.read(testylog.external())
@@ -179,8 +184,8 @@ if __name__ == '__main__':
     # ss = '引起报错的函数foo   参数较多，代码中已经用了换行。这样导致报错'
     # print(ss.replace(' ',''))
 
-    # judge('引起报错的函数foo   参数较多，代码中已经用了换行。这样导致报错','引起报2的函数foo参数较多，代码  中已经用了换行。这样导致报错')
-
+    res = judge('引起报错的函数foo   参数较多，代码中已经用了换行。这样导致报错','引起报2的函数foo参数较多，代码  中已经用了换行。这样导致报错')
+    print(res)
 
 
 
